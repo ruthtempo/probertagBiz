@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ruthtempo/probertagBiz#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.4.0",
     "puppeteer": "^19.5.2"
   }
 }
