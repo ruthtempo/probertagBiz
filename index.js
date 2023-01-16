@@ -33,22 +33,16 @@ async function getFlats() {
     sqm: sqms[i],
   }));
 
-  //console.log(flatsDetails);
-
   //supabase (backend)
 
   const { data: oldFlats } = await supabase.from("wohnungen").select("*");
 
-  const newFlats = flatsDetails.filter((flat) => {
-    if (oldFlats.some((oldFlat) => oldFlat.url === flat.url) === false) {
-      return flat;
-    }
-  });
+  const newFlats = flatsDetails.filter(
+    (flat) => oldFlats.every((oldFlat) => oldFlat.url !== flat.url) //every flat url must be different from newurl
+  );
+  // todo : send email to notify about new flats ( if newflats is not empty) ?
 
-  console.log(newFlats);
-
-  const { error } = await supabase.from("wohnungen").insert(newFlats);
-  console.log("myerr", error);
+  await supabase.from("wohnungen").insert(newFlats); // if newflats empty, not appended/ nothing happens
 
   await browser.close();
 }
