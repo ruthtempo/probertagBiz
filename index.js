@@ -9,11 +9,11 @@ async function getFlats() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(
-    "https://english.habitaclia.com/rent-district_eixample-barcelona.htm?ordenar=mas_recientes&pmax=800&codzonas=203,204,205,201,202,206&coddists=200"
+    "https://english.habitaclia.com/rent-district_eixample-barcelona.htm?ordenar=mas_recientes&pmax=800&codzonas=203,204,205,201,202,206&coddists=200" //url has parameter for area, recent, etc..
   );
 
-  const titles = await page.$$eval(".list-item-title a", (link) =>
-    link.map((l) => l.innerText)
+  const titles = await page.$$eval(".list-item-title a", (titles) =>
+    titles.map((t) => t.innerText)
   );
 
   const urls = await page.$$eval(".list-item-title a", (link) =>
@@ -40,12 +40,12 @@ async function getFlats() {
 
   //supabase (backend)
 
-  const { data: oldFlats } = await supabase.from("wohnungen").select("*");
+  const { data: oldFlats } = await supabase.from("wohnungen").select("*"); //old flats
 
   const newFlats = flatsDetails.filter(
     (flat) => oldFlats.every((oldFlat) => oldFlat.url !== flat.url) //every flat url must be different from newurl
   );
-  // todo : send email to notify about new flats ( if newflats is not empty) ?
+  // todo : send email/telegram/notification to notify about new flats ( if newflats is not empty) ?
 
   const { error } = await supabase.from("wohnungen").insert(newFlats); // if newflats empty, not appended/ nothing happens
   console.log(error);
@@ -53,3 +53,5 @@ async function getFlats() {
 }
 
 getFlats();
+
+//todo settimeout
