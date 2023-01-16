@@ -12,6 +12,10 @@ async function getFlats() {
     "https://english.habitaclia.com/rent-district_eixample-barcelona.htm?ordenar=mas_recientes&pmax=800&codzonas=203,204,205,201,202,206&coddists=200"
   );
 
+  const titles = await page.$$eval(".list-item-title a", (link) =>
+    link.map((l) => l.innerText)
+  );
+
   const urls = await page.$$eval(".list-item-title a", (link) =>
     link.map((l) => l.href)
   );
@@ -31,6 +35,7 @@ async function getFlats() {
     url,
     price: prices[i],
     sqm: sqms[i],
+    title: titles[i],
   }));
 
   //supabase (backend)
@@ -42,8 +47,8 @@ async function getFlats() {
   );
   // todo : send email to notify about new flats ( if newflats is not empty) ?
 
-  await supabase.from("wohnungen").insert(newFlats); // if newflats empty, not appended/ nothing happens
-
+  const { error } = await supabase.from("wohnungen").insert(newFlats); // if newflats empty, not appended/ nothing happens
+  console.log(error);
   await browser.close();
 }
 
