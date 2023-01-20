@@ -56,9 +56,7 @@ function App() {
 
   return (
     <Container className="my-4">
-      <h1 className="text-center">
-        My Flat Alerts in Barcelona <i>(Eixample Neighborhood)</i>
-      </h1>
+      <h1 className="text-center">My Flat Alerts in Barcelona</h1>
       <h3 className="text-center">Average Price: {average} €</h3>
       <Sorter setSortBy={setSortBy} />
       <Row xs={1} md={2} lg={4}>
