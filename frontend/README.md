@@ -1,4 +1,4 @@
-## Web Scraping challenge
+## Web Scraping Challenge
 
 - Getting specific data from a website (data crawling)
 - Saving it into supabase (database)
